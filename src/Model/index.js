@@ -25,6 +25,10 @@ class Routine {
     this.breakDuration = duration;
   }
 
+  setRoutineBreakDuration(duration) {
+    this.routineBreakDuration = duration;
+  }
+
   setRepeat(repeat) {
     this.repeat = repeat;
   }
@@ -41,6 +45,7 @@ class Routine {
 
   build() {
     const breakDuration = this.breakDuration || 1;
+    const routineBreakDuration = this.routineBreakDuration || 2;
     const repeat = this.repeat || 1;
 
     const routine = this.exercises.reduce(function (list, exercise) {
@@ -50,7 +55,7 @@ class Routine {
     let trainning = [];
 
     for (let i=0; i < repeat; i++) {
-      trainning = [... trainning, routine]
+      trainning = [... trainning, routine, new Break(routineBreakDuration)]
     }
 
     return trainning;
@@ -60,7 +65,18 @@ class Routine {
 
 class Trainning {
   startTrainning(routine) {
-    console.log(routine.build())
+    const completeRoutine = routine.build();
+
+    return completeRoutine.reduce(function (ant, exercise) {
+      return ant.then(function () {
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            console.log('haciendo ejercicio', exercise);
+            resolve()
+          }, exercise.duration * 1000)
+        })
+      })
+    }, Promise.resolve())
   }
 }
 
@@ -73,7 +89,6 @@ const rutina = new Routine('miRutina');
 rutina.addExercise(ex1);
 rutina.addExercise(ex2);
 
-console.log(rutina.exercises);
 rutina.setBreakDuration(2);
 rutina.setRepeat(3);
 
