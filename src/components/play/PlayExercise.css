@@ -1,0 +1,10 @@
+#ping {
+    /*visibility: hidden;*/
+    width: 50px;
+    height: auto;
+}
+
+img {
+    max-width: 200px;
+    height:auto;
+}

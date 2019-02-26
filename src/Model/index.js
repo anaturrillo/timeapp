@@ -11,14 +11,26 @@ class Break {
   constructor(duration) {
     this.duration = duration;
     this.name = 'break';
-    this.img = 'cafecito.png';
+    this.img = 'https://firebasestorage.googleapis.com/v0/b/timeapp-cecba.appspot.com/o/take_a_break.jpg?alt=media&token=2ad2594c-cf3b-40d8-a198-ee5a01c86812';
+  }
+}
+
+class End {
+  constructor(){
+    this.duration = 2;
+    this.name = 'routine end';
+    this.img = 'algo'
   }
 }
 
 class Routine {
-  constructor(name, breakDuration, repeat){
+  constructor(name, breakDuration, repeat, routineBreakDuration, exercises){
     this.name = name;
-    this.exercises = [];
+    this.exercises = exercises || [];
+    this.repeat = repeat;
+    this.breakDuration = breakDuration || 1;
+    this.routineBreakDuration = routineBreakDuration || 0;
+    this.repeat = repeat || 1;
   }
 
   setBreakDuration(duration) {
@@ -44,43 +56,44 @@ class Routine {
   }
 
   build() {
-    const breakDuration = this.breakDuration || 1;
-    const routineBreakDuration = this.routineBreakDuration || 2;
-    const repeat = this.repeat || 1;
-
+    const breakDuration = this.breakDuration;
+    const routineBreakDuration = this.routineBreakDuration;
+    const repeat = this.repeat;
     const routine = this.exercises.reduce(function (list, exercise) {
       return [...list, exercise, new Break(breakDuration)]
     }, []);
 
     let trainning = [];
-
     for (let i=0; i < repeat; i++) {
-      trainning = [... trainning, routine, new Break(routineBreakDuration)]
+      trainning = trainning.concat(routine, new Break(routineBreakDuration))
     }
-
+    trainning = trainning.concat(new End())
     return trainning;
+
+    //return routine;
 
   }
 }
 
 class Trainning {
-  startTrainning(routine) {
-    const completeRoutine = routine.build();
+  startTrainning(routine, playRoutine) {
 
+    const completeRoutine = routine.build();
+    console.log('completeRoutine', completeRoutine)
     return completeRoutine.reduce(function (ant, exercise) {
       return ant.then(function () {
         return new Promise(function (resolve, reject) {
-          setTimeout(function () {
-            console.log('haciendo ejercicio', exercise);
-            resolve()
-          }, exercise.duration * 1000)
+          playRoutine.changeExercise(exercise);
+
+          setTimeout(resolve, exercise.duration * 1000)
         })
       })
     }, Promise.resolve())
   }
 }
 
-
+export {Break, Exercise, Trainning, Routine}
+/*
 const ex1 = new Exercise('puente', 'puente.png', 10);
 const ex2 = new Exercise('el hombre parado', 'hombre_parado.png', 15);
 
@@ -96,3 +109,4 @@ const trainning = new Trainning();
 
 trainning.startTrainning(rutina);
 
+*/

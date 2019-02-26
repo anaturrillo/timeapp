@@ -8,6 +8,12 @@ export default function Menu() {
         <li>
           <Link to="/">Home</Link>
         </li>
+        <li>
+          <Link to="/ejercicios">Ejercicios</Link>
+        </li>
+        <li>
+          <Link to="/rutinas">Rutinas</Link>
+        </li>
       </ul>
   );
 }
