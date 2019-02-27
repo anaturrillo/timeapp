@@ -31,7 +31,7 @@ export function saveRoutine(routine) {
   return dispatch => WorkoutApi.saveRoutine(newR)
     .then(_ => {
       dispatch(saveRoutineSucess(newR));
-      window.location = '/routines'
+      window.location = '/rutinas'
     })
     .catch(e => {
       throw(e);

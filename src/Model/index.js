@@ -8,10 +8,11 @@ class Exercise {
 }
 
 class Break {
-  constructor(duration) {
+  constructor(duration, next) {
     this.duration = duration;
     this.name = 'break';
     this.img = 'https://firebasestorage.googleapis.com/v0/b/timeapp-cecba.appspot.com/o/take_a_break.jpg?alt=media&token=2ad2594c-cf3b-40d8-a198-ee5a01c86812';
+    this.next = next || {}
   }
 }
 
@@ -59,15 +60,28 @@ class Routine {
     const breakDuration = this.breakDuration;
     const routineBreakDuration = this.routineBreakDuration;
     const repeat = this.repeat;
-    const routine = this.exercises.reduce(function (list, exercise) {
-      return [...list, exercise, new Break(breakDuration)]
-    }, []);
+    const exercises = this.exercises;
+    const routine = exercises
+      .reduce(function (list, exercise, index) {
+        const next = {};
+
+        if (index + 1 < exercises.length) {
+          next.name = exercises[index+1].name;
+          next.pic = exercises[index+1].img;
+          return [...list, exercise, new Break(breakDuration, next)]
+
+        }else {
+          return [...list, exercise]
+        }
+
+
+      }, []);
 
     let trainning = [];
     for (let i=0; i < repeat; i++) {
       trainning = trainning.concat(routine, new Break(routineBreakDuration))
     }
-    trainning = trainning.concat(new End())
+    trainning = trainning.concat(new End());
     return trainning;
 
     //return routine;

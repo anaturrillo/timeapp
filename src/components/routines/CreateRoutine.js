@@ -61,12 +61,10 @@ class CreateRoutine extends React.Component {
     const ex = this.state.allExercises.find(e => e.id === exId);
     const exercises = [...this.state.routine.exercises, ex];
 
-    const allExercises = this.state.allExercises.filter(e => e.id !== exId);
     const newState = Object.assign(
       {},
       this.state,
-      {routine: Object.assign({}, this.state.routine, {exercises: exercises})},
-      {allExercises:allExercises}
+      {routine: Object.assign({}, this.state.routine, {exercises: exercises})}
     );
 
     this.setState(newState)
@@ -94,7 +92,7 @@ class CreateRoutine extends React.Component {
               {this.state.routine.exercises.map(function (e) {
                 return (<tr key={e.id}>
                   <td>{e.name}</td>
-                  <td>foto</td>
+                  <td><img src={e.pic} /></td>
                   <td><NumberInput name="duration" label="duracion" onChange={this.onExerciseDurationChange(e.id)} /></td>
                 </tr>)
               }, this)}
@@ -114,7 +112,7 @@ class CreateRoutine extends React.Component {
               {this.state.allExercises && this.state.allExercises.map(function (e) {
                 return (<tr key={e.id}>
                   <td>{e.name}</td>
-                  <td>foto</td>
+                  <td><img src={e.pic} /></td>
                   <td><button onClick={this.addExercise} value={e.id}>+</button></td>
                 </tr>)
               }, this)}

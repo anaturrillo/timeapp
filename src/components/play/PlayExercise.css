@@ -8,3 +8,13 @@ img {
     max-width: 200px;
     height:auto;
 }
+
+.row {
+    display: flex;
+    justify-content: space-around;
+}
+
+.countdown {
+    font-size: 160px;
+    margin: 0;
+}
